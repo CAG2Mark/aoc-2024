@@ -15,6 +15,9 @@ def get(a1, b1, a2, b2, x, y):
     t = inverse[0][0] * x + inverse[0][1] * y
     s = inverse[1][0] * x + inverse[1][1] * y
     if t % det != 0 or s % det != 0: return 0
+    
+    sgn = -1 if det < 0 else 1
+    if t * sgn < 0 or s * sgn < 0: return 0
 
     return 3 * t // det + s // det
 
