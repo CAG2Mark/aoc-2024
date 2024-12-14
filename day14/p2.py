@@ -13,9 +13,9 @@ def solve(inp: List[str]):
         robots.append((r, c, dr, dc))
 
     # heuristic: if it's a christmas tree, it should be mostly one block
-    def block_sizes():
+    def is_block_size_small(limit):
         s = set()
-        blocks = []
+        blocks = 0
         for r, c, _, _ in robots:
             s.add((r, c))
         while s:
@@ -33,13 +33,14 @@ def solve(inp: List[str]):
                     if not (0 <= nr < ROWS and 0 <= nc < COLS): continue
                     if not (nr, nc) in s: continue
                     q.add((nr, nc))
-            blocks.append(size)
-        return blocks
+            blocks += 1
+            if blocks > limit: return False
+        return True
     
     new_robots = []
-    size = 1000
     i = 0
-    while size > 200:
+    LIM = 200
+    while True:
         for r, c, dr, dc in robots:
             r = (r + dr) % ROWS
             c = (c + dc) % COLS
@@ -47,7 +48,7 @@ def solve(inp: List[str]):
         robots = new_robots
         new_robots = []
         i += 1
-        size = len(block_sizes())
+        if is_block_size_small(LIM): break
     
     def print_board():
         s = set()
